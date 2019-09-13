@@ -70,7 +70,7 @@ function mdToHtml(Metadata, siteConfig) {
   const result = {};
   Object.keys(Metadata).forEach(id => {
     const metadata = Metadata[id];
-    if (metadata.language !== 'en' || metadata.original_id) {
+    if (metadata.language !== 'en') {
       return;
     }
     let htmlLink = baseUrl + metadata.permalink.replace('/next/', '/');
@@ -78,7 +78,7 @@ function mdToHtml(Metadata, siteConfig) {
     const baseDocsPart = `${baseUrl}${docsUrl ? `${docsUrl}/` : ''}`;
 
     const i18nDocsRegex = new RegExp(`^${baseDocsPart}en/`);
-    const docsRegex = new RegExp(`^${baseDocsPart}`);
+    const docsRegex = new RegExp(`^${baseDocsPart}(${metadata.version}/)?`);
     if (i18nDocsRegex.test(htmlLink)) {
       htmlLink = htmlLink.replace(i18nDocsRegex, `${baseDocsPart}en/VERSION/`);
     } else {

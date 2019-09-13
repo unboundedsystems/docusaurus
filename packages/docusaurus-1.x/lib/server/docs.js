@@ -61,6 +61,9 @@ function mdToHtmlify(oldContent, mdToHtml, metadata, siteConfig) {
     if (fencedBlock) return line;
 
     let modifiedLine = line;
+    const deb = (...args) => {
+      if (false && modifiedLine.includes('externaldockerhost')) console.log(...args);
+    }
     /* Replace inline-style links or reference-style links e.g:
     This is [Document 1](doc1.md) -> we replace this doc1.md with correct link
     [doc1]: doc1.md -> we replace this doc1.md with correct link
@@ -68,12 +71,33 @@ function mdToHtmlify(oldContent, mdToHtml, metadata, siteConfig) {
     const mdRegex = /(?:(?:\]\()|(?:\]:\s?))(?!https)([^'")\]\s>]+\.md)/g;
     let mdMatch = mdRegex.exec(modifiedLine);
     while (mdMatch !== null) {
+      deb('\nMatch: ', mdMatch[1]);
+      deb('  LINE: ', modifiedLine);
+      deb('  version', metadata.version);
+      deb('  meta source: ', metadata.source);
+      // for (const k of Object.keys(mdToHtml)) {
+      //   if (k.includes('externaldockerhost')) deb("  meta:", k, "->", mdToHtml[k]);
+      // }
       /* Replace it to correct html link */
       const docsSource = metadata.version
         ? metadata.source.replace(/version-.*?\//, '')
         : metadata.source;
-      let htmlLink =
-        mdToHtml[resolve(docsSource, mdMatch[1])] || mdToHtml[mdMatch[1]];
+      deb('  docs source: ', docsSource);
+      const resolvers = [
+        () => resolve(docsSource, mdMatch[1]),
+        () => mdMatch[1],
+        () => metadata.version && resolve(metadata.source, mdMatch[1]),
+      ]
+      const resolveLink = () => {
+        for (const r of resolvers) {
+          const p = r();
+          deb('  Trying path:', p);
+          const link = mdToHtml[p];
+          if (link) return link;
+        }
+      }
+      let htmlLink = resolveLink();
+      deb('  Resolved:', htmlLink);
       if (htmlLink) {
         htmlLink = getPath(htmlLink, siteConfig.cleanUrl);
         htmlLink = htmlLink.replace('/en/', `/${metadata.language}/`);
