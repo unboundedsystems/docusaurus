@@ -72,6 +72,7 @@ class BlogPostLayout extends React.Component {
             post.path
           }`}
           data-related={this.props.config.twitter}
+          data-size="large"
           data-via={post.authorTwitter}
           data-show-count="false">
           Tweet
