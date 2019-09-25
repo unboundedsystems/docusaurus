@@ -71,7 +71,7 @@ class BlogPostLayout extends React.Component {
           data-url={`${this.props.config.url + this.props.config.baseUrl}blog/${
             post.path
           }`}
-          data-related={this.props.config.twitter}
+          data-related={this.props.config.twitterUsername}
           data-size="large"
           data-via={post.authorTwitter}
           data-show-count="false">
