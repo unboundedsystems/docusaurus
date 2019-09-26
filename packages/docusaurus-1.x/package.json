@@ -1,7 +1,7 @@
 {
   "name": "@unboundedsystems/docusaurus",
   "description": "Easy to Maintain Open Source Documentation Websites",
-  "version": "1.12.0-unb.1",
+  "version": "1.12.0-unb.2",
   "license": "MIT",
   "keywords": [
     "documentation",
@@ -35,6 +35,10 @@
     "@babel/register": "^7.5.5",
     "@babel/traverse": "^7.5.5",
     "@babel/types": "^7.5.5",
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-brands-svg-icons": "^5.11.2",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "autoprefixer": "^9.6.0",
     "babylon": "^6.18.0",
     "chalk": "^2.4.2",
