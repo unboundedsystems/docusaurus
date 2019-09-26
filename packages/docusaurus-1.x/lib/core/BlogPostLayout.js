@@ -15,6 +15,19 @@ const Site = require('./Site.js');
 const OnPageNav = require('./nav/OnPageNav.js');
 const utils = require('./utils.js');
 
+function BlogCommentSystem({ config }) {
+  if (!config.commentSystem || !config.commentSystem.blog) return null;
+  if (config.commentSystem.type === "commento") {
+    return (
+      <div className="commentSection">
+        <div id="commento" />
+        <script src="https://cdn.commento.io/js/commento.js" />
+      </div>
+    );
+  }
+  return null;
+}
+
 // used for entire blog posts, i.e., each written blog article with sidebar with site header/footer
 class BlogPostLayout extends React.Component {
   getDescription() {
@@ -71,7 +84,8 @@ class BlogPostLayout extends React.Component {
           data-url={`${this.props.config.url + this.props.config.baseUrl}blog/${
             post.path
           }`}
-          data-related={this.props.config.twitter}
+          data-related={this.props.config.twitterUsername}
+          data-size="large"
           data-via={post.authorTwitter}
           data-show-count="false">
           Tweet
@@ -125,6 +139,7 @@ class BlogPostLayout extends React.Component {
                 {blogSidebarTitleConfig.default || 'Recent Posts'}
               </a>
             </div>
+            <BlogCommentSystem config={this.props.config} />
           </Container>
           {hasOnPageNav && (
             <nav className="onPageNav">
