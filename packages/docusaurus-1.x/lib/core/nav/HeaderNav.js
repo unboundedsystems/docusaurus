@@ -215,7 +215,7 @@ class HeaderNav extends React.Component {
     } else if (link.blog) {
       // set link to blog url
       href = `${this.props.baseUrl}blog/`;
-    }
+    } 
     const itemClasses = classNames({
       siteNavGroupActive:
         (link.doc && docGroupActive) || (link.blog && this.props.current.blog),
@@ -227,9 +227,11 @@ class HeaderNav extends React.Component {
     const i18n = translation[this.props.language];
     return (
       <li key={`${link.label}page`} className={itemClasses}>
-        <a href={href} target={link.external ? '_blank' : '_self'}>
-          {idx(i18n, ['localized-strings', 'links', link.label]) || link.label}
-        </a>
+        { link.raw 
+          ? link.raw 
+          : <a href={href} target={link.external ? '_blank' : '_self'}>
+              {idx(i18n, ['localized-strings', 'links', link.label]) || link.label}
+            </a> }
       </li>
     );
   }
