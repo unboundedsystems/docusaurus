@@ -118,6 +118,7 @@ class BlogPostLayout extends React.Component {
         description={this.getDescription()}
         config={this.props.config}
         authorTwitter={post.authorTwitter}
+        image={post.image}
         metadata={{blog: true}}>
         <div className="docMainWrapper wrapper">
           <BlogSidebar

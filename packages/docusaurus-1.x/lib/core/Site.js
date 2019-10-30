@@ -67,6 +67,7 @@ class Site extends React.Component {
           authorTwitter={this.props.authorTwitter}
           config={this.props.config}
           description={description}
+          image={this.props.image}
           title={title}
           url={url}
           language={this.props.language}

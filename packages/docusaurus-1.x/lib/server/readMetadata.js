@@ -37,6 +37,7 @@ const SupportedHeaderFields = new Set([
   'layout',
   'custom_edit_url',
   'description',
+  'image',
 ]);
 
 let allSidebars;
