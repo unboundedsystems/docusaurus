@@ -64,8 +64,11 @@ class Site extends React.Component {
     return (
       <html lang={this.props.language}>
         <Head
+          authorTwitter={this.props.authorTwitter}
           config={this.props.config}
           description={description}
+          image={this.props.image}
+          metadata={this.props.metadata}
           title={title}
           url={url}
           language={this.props.language}

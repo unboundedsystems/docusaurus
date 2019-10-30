@@ -15,9 +15,9 @@ const Site = require('./Site.js');
 const OnPageNav = require('./nav/OnPageNav.js');
 const utils = require('./utils.js');
 
-function BlogCommentSystem({ config }) {
+function BlogCommentSystem({config}) {
   if (!config.commentSystem || !config.commentSystem.blog) return null;
-  if (config.commentSystem.type === "commento") {
+  if (config.commentSystem.type === 'commento') {
     return (
       <div className="commentSection">
         <div id="commento" />
@@ -117,6 +117,8 @@ class BlogPostLayout extends React.Component {
         language="en"
         description={this.getDescription()}
         config={this.props.config}
+        authorTwitter={post.authorTwitter}
+        image={post.image}
         metadata={{blog: true}}>
         <div className="docMainWrapper wrapper">
           <BlogSidebar

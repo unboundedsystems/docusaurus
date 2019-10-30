@@ -30,6 +30,11 @@ class Head extends React.Component {
     const siteUrl = `${(
       this.props.config.url + this.props.config.baseUrl
     ).replace(/\/+$/, '')}/`;
+    const ogSiteName = this.props.config.ogSiteName || this.props.config.title;
+    const ogImage = this.props.image || this.props.config.ogImage;
+    const ogType =
+      this.props.metadata && this.props.metadata.blog ? 'article' : 'website';
+    const twitterImage = this.props.image || this.props.config.twitterImage;
 
     return (
       <head>
@@ -46,20 +51,22 @@ class Head extends React.Component {
           <meta name="docsearch:language" content={this.props.language} />
         )}
         <meta property="og:title" content={this.props.title} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
+        <meta property="og:site_name" content={ogSiteName} />
         <meta property="og:url" content={this.props.url} />
         <meta property="og:description" content={this.props.description} />
-        {this.props.config.ogImage && (
-          <meta
-            property="og:image"
-            content={siteUrl + this.props.config.ogImage}
-          />
+        {ogImage && <meta property="og:image" content={siteUrl + ogImage} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        {twitterImage && (
+          <meta name="twitter:image" content={siteUrl + twitterImage} />
         )}
-        <meta name="twitter:card" content="summary" />
-        {this.props.config.twitterImage && (
+        {this.props.authorTwitter && (
+          <meta name="twitter:creator" content={this.props.authorTwitter} />
+        )}
+        {this.props.config.twitterUsername && (
           <meta
-            name="twitter:image"
-            content={siteUrl + this.props.config.twitterImage}
+            name="twitter:site"
+            content={this.props.config.twitterUsername}
           />
         )}
         {this.props.config.noIndex && <meta name="robots" content="noindex" />}
