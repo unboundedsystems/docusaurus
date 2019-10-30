@@ -30,6 +30,7 @@ class Head extends React.Component {
     const siteUrl = `${(
       this.props.config.url + this.props.config.baseUrl
     ).replace(/\/+$/, '')}/`;
+    const ogSiteName = this.props.config.ogSiteName || this.props.config.title;
     const ogImage = this.props.image || this.props.config.ogImage;
     const twitterImage = this.props.image || this.props.config.twitterImage;
 
@@ -49,6 +50,7 @@ class Head extends React.Component {
         )}
         <meta property="og:title" content={this.props.title} />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={ogSiteName} />
         <meta property="og:url" content={this.props.url} />
         <meta property="og:description" content={this.props.description} />
         {ogImage && <meta property="og:image" content={siteUrl + ogImage} />}
