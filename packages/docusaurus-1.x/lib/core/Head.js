@@ -56,7 +56,7 @@ class Head extends React.Component {
         <meta property="og:url" content={this.props.url} />
         <meta property="og:description" content={this.props.description} />
         {ogImage && <meta property="og:image" content={siteUrl + ogImage} />}
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         {twitterImage && (
           <meta name="twitter:image" content={siteUrl + twitterImage} />
         )}
