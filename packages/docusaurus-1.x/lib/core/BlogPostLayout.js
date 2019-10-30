@@ -11,6 +11,7 @@ const React = require('react');
 const BlogPost = require('./BlogPost.js');
 const BlogSidebar = require('./BlogSidebar.js');
 const Container = require('./Container.js');
+const mdDescription = require('./mdDescription');
 const Site = require('./Site.js');
 const OnPageNav = require('./nav/OnPageNav.js');
 const utils = require('./utils.js');
@@ -31,14 +32,7 @@ function BlogCommentSystem({config}) {
 // used for entire blog posts, i.e., each written blog article with sidebar with site header/footer
 class BlogPostLayout extends React.Component {
   getDescription() {
-    const descLines = this.props.children.trim().split('\n');
-    for (let i = 0; i < descLines.length; i++) {
-      // Don't want blank lines or descriptions that are raw image rendering strings.
-      if (descLines[i] && !descLines[i].startsWith('![')) {
-        return descLines[i];
-      }
-    }
-    return null;
+    return mdDescription(this.props.metadata, this.props.children);
   }
 
   renderSocialButtons() {

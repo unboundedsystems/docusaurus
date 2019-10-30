@@ -9,53 +9,16 @@ const classNames = require('classnames');
 const path = require('path');
 const React = require('react');
 const url = require('url');
-const Remarkable = require('remarkable');
 
 const Container = require('./Container.js');
 const Doc = require('./Doc.js');
 const DocsSidebar = require('./DocsSidebar.js');
+const mdDescription = require('./mdDescription');
 const OnPageNav = require('./nav/OnPageNav.js');
 const Site = require('./Site.js');
 const translation = require('../server/translation.js');
 const docs = require('../server/docs.js');
 const {idx, getGitLastUpdatedTime, getGitLastUpdatedBy} = require('./utils.js');
-
-const MAX_DESCRIPTION = 160; // Max length for HTML description meta tag
-
-function findTextChunks(doc, callback, headings) {
-  let heading = 0;
-
-  function processChunks(chunks) {
-    const len = chunks.length;
-    for (let i = 0; i < len; i++) {
-      const c = chunks[i];
-      switch (c.type) {
-        case 'heading_open':
-          heading++;
-          break;
-        case 'heading_close':
-          heading--;
-          break;
-        case 'text':
-        case 'code':
-          if (headings || heading === 0) {
-            // callback returns true to keep iterating
-            if (!callback(c.content)) return false;
-          }
-          break;
-        default:
-          break;
-      }
-      if (c.children) {
-        if (!processChunks(c.children)) return false;
-      }
-    }
-    return true; // Keep iterating
-  }
-
-  const md = new Remarkable();
-  processChunks(md.parse(doc, {}));
-}
 
 // component used to generate whole webpage for docs, including sidebar/header/footer
 class DocsLayout extends React.Component {
@@ -73,36 +36,7 @@ class DocsLayout extends React.Component {
   };
 
   getDescription() {
-    let desc = this.props.metadata.description || '';
-    if (desc) {
-      if (desc.length > MAX_DESCRIPTION) {
-        console.log(
-          `WARNING: meta description longer than maximum of ` +
-            `${MAX_DESCRIPTION} characters [` +
-            `${this.props.metadata.source || this.props.metadata.id}]`,
-        );
-      }
-      return this.props.metadata.description;
-    }
-
-    findTextChunks(this.props.children, text => {
-      desc +=
-        ' ' +
-        text
-          .replace(/<!--.*?-->/g, '') // Remove HTML comments
-          .replace(/<[a-z/][^>]*>/gi, '') // Remove HTML tags
-          .replace(/"/g, ''); // Double quote not legal in description
-      desc = desc
-        .replace(/\s+/g, ' ') // Replace returns & multiple spaces with one space
-        .trim();
-      // Return true to keep getting more text
-      return desc.length < MAX_DESCRIPTION;
-    });
-
-    if (desc.length <= MAX_DESCRIPTION) return desc;
-
-    // Truncate at the last word boundary
-    return desc.substr(0, desc.lastIndexOf(' ', MAX_DESCRIPTION));
+    return mdDescription(this.props.metadata, this.props.children);
   }
 
   render() {
