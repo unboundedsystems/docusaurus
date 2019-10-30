@@ -59,6 +59,12 @@ class Head extends React.Component {
         {this.props.authorTwitter && (
           <meta name="twitter:creator" content={this.props.authorTwitter} />
         )}
+        {this.props.config.twitterUsername && (
+          <meta
+            name="twitter:site"
+            content={this.props.config.twitterUsername}
+          />
+        )}
         {this.props.config.noIndex && <meta name="robots" content="noindex" />}
         {this.props.redirect && (
           <meta httpEquiv="refresh" content={`0; URL=${this.props.redirect}`} />
