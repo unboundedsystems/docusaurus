@@ -32,6 +32,8 @@ class Head extends React.Component {
     ).replace(/\/+$/, '')}/`;
     const ogSiteName = this.props.config.ogSiteName || this.props.config.title;
     const ogImage = this.props.image || this.props.config.ogImage;
+    const ogType =
+      this.props.metadata && this.props.metadata.blog ? 'article' : 'website';
     const twitterImage = this.props.image || this.props.config.twitterImage;
 
     return (
@@ -49,7 +51,7 @@ class Head extends React.Component {
           <meta name="docsearch:language" content={this.props.language} />
         )}
         <meta property="og:title" content={this.props.title} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:site_name" content={ogSiteName} />
         <meta property="og:url" content={this.props.url} />
         <meta property="og:description" content={this.props.description} />
