@@ -116,7 +116,9 @@ class SideNav extends React.Component {
   renderItemLink = linkItem => {
     const linkMetadata = linkItem.item;
     const itemClasses = classNames('navListItem', {
-      navListItemActive: linkMetadata.id === this.props.current.id,
+      navListItemActive:
+        linkMetadata.id === this.props.current.id ||
+        linkMetadata.id === this.props.current.parent_id,
     });
     return (
       <li className={itemClasses} key={linkMetadata.id}>

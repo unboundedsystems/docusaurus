@@ -38,6 +38,7 @@ const SupportedHeaderFields = new Set([
   'custom_edit_url',
   'description',
   'image',
+  'parent_id',
 ]);
 
 let allSidebars;
@@ -204,6 +205,15 @@ function processMetadata(file, refDir) {
       metadata.previous_id = item.previous;
       metadata.previous =
         (env.translation.enabled ? `${language}-` : '') + item.previous;
+    }
+  } else {
+    const parentId = metadata.parent_id;
+    const parentItem = parentId && items[parentId];
+    if (parentItem) {
+      metadata.sidebar = parentItem.sidebar;
+      metadata.category = parentItem.category;
+      metadata.subcategory = parentItem.subcategory;
+      metadata.order = parentItem.order;
     }
   }
 

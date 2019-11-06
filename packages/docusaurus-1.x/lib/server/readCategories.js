@@ -20,7 +20,9 @@ function readCategories(sidebar, allMetadata, languages) {
       const metadatas = Object.values(allMetadata)
         .filter(
           metadata =>
-            metadata.sidebar === sidebar && metadata.language === language,
+            metadata.sidebar === sidebar &&
+            metadata.language === language &&
+            !metadata.parent_id,
         )
         .sort((a, b) => a.order - b.order);
 
