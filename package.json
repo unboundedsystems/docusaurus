@@ -75,5 +75,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "resolutions": {
+    "gaze": "unboundedsystems/gaze#stack_size_fix"
   }
 }
