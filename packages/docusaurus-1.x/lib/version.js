@@ -30,7 +30,6 @@ const path = require('path');
 
 const readMetadata = require('./server/readMetadata.js');
 const utils = require('./server/utils.js');
-const versionFallback = require('./server/versionFallback.js');
 const metadataUtils = require('./server/metadataUtils.js');
 const env = require('./server/env.js');
 
@@ -129,10 +128,6 @@ files.forEach(file => {
 
   const docsDir = path.join(CWD, '../', readMetadata.getDocsPath());
   const subDir = utils.getSubDir(file, docsDir);
-  const docId = subDir ? `${subDir}/${metadata.id}` : metadata.id;
-  if (!versionFallback.diffLatestDoc(file, docId)) {
-    return;
-  }
 
   metadata.original_id = metadata.id;
   metadata.id = `version-${version}-${metadata.id}`;
@@ -147,43 +142,41 @@ files.forEach(file => {
   );
 });
 
-// copy sidebar if necessary
-if (versionFallback.diffLatestSidebar()) {
-  mkdirp(`${CWD}/versioned_sidebars`);
-  const sidebar = JSON.parse(fs.readFileSync(`${CWD}/sidebars.json`, 'utf8'));
-  const versioned = {};
+// copy sidebar
+mkdirp.sync(`${CWD}/versioned_sidebars`);
+const sidebar = JSON.parse(fs.readFileSync(`${CWD}/sidebars.json`, 'utf8'));
+const versioned = {};
 
-  Object.keys(sidebar).forEach(sb => {
-    const versionSidebar = `version-${version}-${sb}`;
-    versioned[versionSidebar] = {};
+Object.keys(sidebar).forEach(sb => {
+  const versionSidebar = `version-${version}-${sb}`;
+  versioned[versionSidebar] = {};
 
-    const categories = sidebar[sb];
-    Object.keys(categories).forEach(category => {
-      versioned[versionSidebar][category] = [];
+  const categories = sidebar[sb];
+  Object.keys(categories).forEach(category => {
+    versioned[versionSidebar][category] = [];
 
-      const categoryItems = categories[category];
-      categoryItems.forEach(categoryItem => {
-        let versionedCategoryItem = categoryItem;
-        if (typeof categoryItem === 'object') {
-          if (categoryItem.ids && categoryItem.ids.length > 0) {
-            versionedCategoryItem.ids = categoryItem.ids.map(
-              id => `version-${version}-${id}`,
-            );
-          }
-        } else if (typeof categoryItem === 'string') {
-          versionedCategoryItem = `version-${version}-${categoryItem}`;
+    const categoryItems = categories[category];
+    categoryItems.forEach(categoryItem => {
+      let versionedCategoryItem = categoryItem;
+      if (typeof categoryItem === 'object') {
+        if (categoryItem.ids && categoryItem.ids.length > 0) {
+          versionedCategoryItem.ids = categoryItem.ids.map(
+            id => `version-${version}-${id}`,
+          );
         }
-        versioned[versionSidebar][category].push(versionedCategoryItem);
-      });
+      } else if (typeof categoryItem === 'string') {
+        versionedCategoryItem = `version-${version}-${categoryItem}`;
+      }
+      versioned[versionSidebar][category].push(versionedCategoryItem);
     });
   });
+});
 
-  fs.writeFileSync(
-    `${CWD}/versioned_sidebars/version-${version}-sidebars.json`,
-    `${JSON.stringify(versioned, null, 2)}\n`,
-    'utf8',
-  );
-}
+fs.writeFileSync(
+  `${CWD}/versioned_sidebars/version-${version}-sidebars.json`,
+  `${JSON.stringify(versioned, null, 2)}\n`,
+  'utf8',
+);
 
 // update versions.json file
 versions.unshift(version);
