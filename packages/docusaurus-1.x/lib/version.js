@@ -85,7 +85,7 @@ if (versions.includes(version)) {
 function makeHeader(metadata) {
   let header = '---\n';
   Object.keys(metadata).forEach(key => {
-    header += `${key}: ${metadata[key]}\n`;
+    header += `${key}: ${JSON.stringify(metadata[key])}\n`;
   });
   header += '---\n';
   return header;
@@ -134,6 +134,9 @@ files.forEach(file => {
   const targetFile = subDir
     ? `${versionFolder}/${subDir}/${path.basename(file)}`
     : `${versionFolder}/${path.basename(file)}`;
+  if (metadata.parent_id) {
+    metadata.parent_id = `version-${version}-${metadata.parent_id}`;
+  }
 
   writeFileAndCreateFolder(
     targetFile,

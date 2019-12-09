@@ -336,6 +336,13 @@ function generateMetadataDocs() {
           (env.translation.enabled ? `${metadata.language}-` : '') +
           order[id].previous;
       }
+    } else if (metadata.parent_id && order[metadata.parent_id]) {
+      const parent = order[metadata.parent_id];
+
+      metadata.sidebar = parent.sidebar;
+      metadata.category = parent.category;
+      metadata.subcategory = parent.subcategory;
+      metadata.order = parent.order;
     }
     metadatas[metadata.id] = metadata;
   });
