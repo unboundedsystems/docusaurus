@@ -134,6 +134,9 @@ files.forEach(file => {
   const targetFile = subDir
     ? `${versionFolder}/${subDir}/${path.basename(file)}`
     : `${versionFolder}/${path.basename(file)}`;
+  if (metadata.parent_id) {
+    metadata.parent_id = `version-${version}-${metadata.parent_id}`;
+  }
 
   writeFileAndCreateFolder(
     targetFile,
