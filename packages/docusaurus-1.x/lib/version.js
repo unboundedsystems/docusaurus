@@ -85,7 +85,7 @@ if (versions.includes(version)) {
 function makeHeader(metadata) {
   let header = '---\n';
   Object.keys(metadata).forEach(key => {
-    header += `${key}: ${metadata[key]}\n`;
+    header += `${key}: ${JSON.stringify(metadata[key])}\n`;
   });
   header += '---\n';
   return header;
