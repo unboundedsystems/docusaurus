@@ -75,14 +75,17 @@ class Site extends React.Component {
           version={this.props.version}
         />
         <body className={this.props.className}>
-          <HeaderNav
-            config={this.props.config}
-            baseUrl={this.props.config.baseUrl}
-            title={this.props.config.title}
-            language={this.props.language}
-            version={this.props.version}
-            current={this.props.metadata}
-          />
+          <div id="fixedHeader">
+            {this.props.config.announcement}
+            <HeaderNav
+              config={this.props.config}
+              baseUrl={this.props.config.baseUrl}
+              title={this.props.config.title}
+              language={this.props.language}
+              version={this.props.version}
+              current={this.props.metadata}
+            />
+          </div>
           <div className={navPusherClasses}>
             {this.props.children}
             <Footer config={this.props.config} language={this.props.language} />
