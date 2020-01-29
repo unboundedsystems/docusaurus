@@ -36,6 +36,66 @@ class Head extends React.Component {
       this.props.metadata && this.props.metadata.blog ? 'article' : 'website';
     const twitterImage = this.props.image || this.props.config.twitterImage;
 
+    let analytics = null;
+
+    if (this.props.config.gtmContainerId) {
+      // Google Tag Manager
+      analytics = (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${
+              this.props.config.gtmContainerId
+            }');
+          `,
+          }}
+        />
+      );
+    } else if (this.props.config.gaTrackingId && this.props.config.gaGtag) {
+      // Analytics with gtag.js
+      analytics = (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${
+              this.props.config.gaTrackingId
+            }`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments); }
+              gtag('js', new Date());
+              gtag('config', '${this.props.config.gaTrackingId}');
+            `,
+            }}
+          />
+        </>
+      );
+    } else if (this.props.config.gaTrackingId && !this.props.config.gaGtag) {
+      // Analytics with analytics.js
+      analytics = (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', '${this.props.config.gaTrackingId}', 'auto');
+            ga('send', 'pageview');
+          `,
+          }}
+        />
+      );
+    }
+
     return (
       <head>
         <meta charSet="utf-8" />
@@ -80,6 +140,7 @@ class Head extends React.Component {
           rel="shortcut icon"
           href={this.props.config.baseUrl + this.props.config.favicon}
         />
+        {analytics}
         {this.props.config.algolia && (
           <link
             rel="stylesheet"
@@ -101,41 +162,6 @@ class Head extends React.Component {
             type="application/rss+xml"
             href={`${siteUrl}blog/feed.xml`}
             title={`${this.props.config.title} Blog RSS Feed`}
-          />
-        )}
-        {this.props.config.gaTrackingId && this.props.config.gaGtag && (
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${
-              this.props.config.gaTrackingId
-            }`}
-          />
-        )}
-        {this.props.config.gaTrackingId && this.props.config.gaGtag && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments); }
-              gtag('js', new Date());
-              gtag('config', '${this.props.config.gaTrackingId}');
-            `,
-            }}
-          />
-        )}
-        {this.props.config.gaTrackingId && !this.props.config.gaGtag && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-              ga('create', '${this.props.config.gaTrackingId}', 'auto');
-              ga('send', 'pageview');
-            `,
-            }}
           />
         )}
 
