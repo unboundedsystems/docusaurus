@@ -75,6 +75,19 @@ class Site extends React.Component {
           version={this.props.version}
         />
         <body className={this.props.className}>
+          {this.props.config.gtmContainerId && (
+            <noscript>
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${
+                  this.props.config.gtmContainerId
+                }`}
+                title="GTM-hidden"
+                height="0"
+                width="0"
+                style={{display: 'none', visibility: 'hidden'}}
+              />
+            </noscript>
+          )}
           <div id="fixedHeader">
             {this.props.config.announcement}
             <HeaderNav
